@@ -1,11 +1,10 @@
 import { Outlet } from "react-router";
-import ButtonUsage from "../components/ButtonUsage";
+import Navbar from "../components/Navbar";
 
 export default function MainLayout() {
     return (
         <div className="container">
-            <ButtonUsage />
-            <h1>Main Layout</h1>
+            <Navbar />
             <Outlet />
         </div>
     )
