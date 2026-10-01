@@ -6,6 +6,7 @@ import RegisterPage from "./pages/Register"
 import LoginPage from "./pages/Login"
 import CartPage from "./pages/Cart"
 import ProductDetailsPage from "./pages/ProductDetails"
+import ErrorPage from "./pages/ErrorPage"
 
 const router = createBrowserRouter([
   {path:"/", element: <MainLayout />, 
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "cart", element: <CartPage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
+      { path: "errors", element: <ErrorPage /> },
     ]}
 ])
 
