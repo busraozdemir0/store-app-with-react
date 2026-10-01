@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import ProductList from "../components/ProductList";
+import Loading from "../components/Loading";
 
 export default function ProductsPage() {
 
@@ -24,7 +25,7 @@ export default function ProductsPage() {
     }, []);
 
     if(loading)
-        return <h1>Loading...</h1>
+        return <Loading />
 
     return <ProductList products={loadedProducts} />
 }
