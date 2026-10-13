@@ -4,22 +4,25 @@ import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHe
 import { currencyTRY } from "../utils/format";
 import { Delete } from "@mui/icons-material";
 import Loading from "../components/Loading";
+import { useCartContext } from "../context/CartContext";
 
 export default function CartPage() {
-    const [cart, setCart] = useState(null);
-    const [loading, setLoading] = useState(true);
+    // const [cart, setCart] = useState(null);
+    // const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        requests.cart.get()
-            .then((cart) => setCart(cart))
-            .catch((error) => console.log(error))
-            .finally(() => setLoading(false));
-    }, []);
+    // useEffect(() => {
+    //     requests.cart.get()
+    //         .then((cart) => setCart(cart))
+    //         .catch((error) => console.log(error))
+    //         .finally(() => setLoading(false));
+    // }, []);
 
-    if(loading) 
-        return <Loading message = "Yükleniyor" />;
+    // if(loading) 
+    //     return <Loading message = "Yükleniyor" />;
 
-    if (!cart) 
+    const {cart} = useCartContext();
+
+    if (!cart || cart.cartItems.length === 0) 
         return <Typography component="h4">Sepetinizde ürün yok.</Typography>
 
     return (

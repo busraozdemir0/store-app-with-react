@@ -2,6 +2,7 @@ import { AppBar, Badge, Box, Button, IconButton, Toolbar } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { Link, NavLink } from "react-router";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useCartContext } from "../context/CartContext";
 
 const links = [
     { title: "Home", to: "/" },
@@ -15,9 +16,12 @@ const authLinks = [
 ];
 
 export default function Navbar() {
-    return <AppBar position="static" sx={{backgroundColor: "secondary.light"}}>
+    const { cart } = useCartContext();
+    const itemCount = cart?.cartItems.reduce((total, item) => total + item.product.quantity, 0); // total değişkenini 0dan başlatıp her bir ürünün quantity değerini toplayıp totale atıyoruz
+
+    return <AppBar position="static" sx={{ backgroundColor: "secondary.light" }}>
         <Toolbar>
-            <Box sx={{display: "flex", alignItems:"center", flexGrow: 1}}>
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
                 <IconButton color="inherit">
                     <StorefrontIcon />
                 </IconButton>
@@ -30,9 +34,9 @@ export default function Navbar() {
                 }
             </Box>
 
-            <Box sx={{display: "flex", alignItems:"center"}}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
                 <IconButton color="inherit" component={Link} to="/cart" size="large" edge="start">
-                    <Badge badgeContent="2" color="secondary">
+                    <Badge badgeContent={itemCount} color="secondary">
                         <ShoppingCartIcon />
                     </Badge>
                 </IconButton>
