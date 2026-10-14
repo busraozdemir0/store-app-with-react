@@ -4,8 +4,8 @@ import { decrement, increment, incrementByValue } from "./counterSlice";
 
 export default function Counter() {
 
-    const value = useSelector(state => state.counter.value); // useSelector => state bilgilerine erişme
-    const dispatch = useDispatch(); // useDispatch => methodlara erişme
+    const {value} = useSelector(state => state.counter); // useSelector() => state bilgilerine erişme
+    const dispatch = useDispatch(); // useDispatch() => methodlara erişme
 
     return (
         <>

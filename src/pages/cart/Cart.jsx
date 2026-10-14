@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import requests from "../api/apiClient";
+
 import { CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button } from "@mui/material";
-import { currencyTRY } from "../utils/format";
+import { currencyTRY } from "../../utils/format";
 import { Delete } from "@mui/icons-material";
-import Loading from "../components/Loading";
-import { useCartContext } from "../context/CartContext";
+import Loading from "../../components/Loading";
+import { useCartContext } from "../../context/CartContext";
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import RemoveCircleOutlinedIcon from '@mui/icons-material/RemoveCircleOutlined';
+import requests from "../../api/apiClient";
+import { useDispatch, useSelector } from "react-redux";
+import { setCart } from "./cartSlice";
 
 export default function CartPage() {
     // const [cart, setCart] = useState(null);
@@ -22,7 +25,10 @@ export default function CartPage() {
     //     return <Loading message = "Yükleniyor" />;
 
 
-    const { cart, setCart } = useCartContext();
+    // const { cart, setCart } = useCartContext();
+
+    const { cart } = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
     const [status, setStatus] = useState({ loading: false, id: "" });
 
     const subTotal = cart?.cartItems.reduce((toplam, item) => toplam + item.product.price * item.product.quantity, 0);
@@ -36,7 +42,7 @@ export default function CartPage() {
     function handleAddItem(productId, id) {
         setStatus({ loading: true, id: id });
         requests.cart.addItem(productId)
-            .then((cart) => setCart(cart))
+            .then((cart) => dispatch(setCart(cart)))
             .catch(error => console.log(error))
             .finally(() => setStatus({ loading: false, id: "" }));
     }
@@ -44,7 +50,7 @@ export default function CartPage() {
     function handleRemoveItem(productId, id, quantity = 1) {
         setStatus({ loading: true, id: id });
         requests.cart.deleteItem(productId, quantity)
-            .then((cart) => setCart(cart))
+            .then((cart) => dispatch(setCart(cart)))
             .catch(error => console.log(error))
             .finally(() => setStatus({ loading: false, id: "" }));
     }

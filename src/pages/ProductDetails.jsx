@@ -4,6 +4,8 @@ import ProductItem from "../components/ProductItem";
 import Loading from "../components/Loading";
 import requests from "../api/apiClient";
 import { useCartContext } from "../context/CartContext";
+import { useDispatch, useSelector } from "react-redux";
+import { setCart } from "./cart/cartSlice";
 
 export default function ProductDetailsPage() {
 
@@ -11,7 +13,9 @@ export default function ProductDetailsPage() {
     const [loading, setLoading] = useState(true);
     const [isAdding, setIsAdding] = useState(false);
     const [product, setProduct] = useState(null);
-    const { cart, setCart } = useCartContext();
+    // const { cart, setCart } = useCartContext();
+    const {cart} = useSelector((state) => state.cart);
+    const dispatch = useDispatch(); 
 
     const cartItem = cart?.cartItems.find(i => i.product.productId == product?.id);
 
@@ -19,7 +23,7 @@ export default function ProductDetailsPage() {
         setIsAdding(true);
 
         requests.cart.addItem(productId)
-        .then(cart => setCart(cart))
+        .then(cart => dispatch(setCart(cart)))
         .catch(error => console.log(error))
         .finally(() => setIsAdding(false));
     }
