@@ -25,6 +25,11 @@ export default function CartPage() {
     const { cart, setCart } = useCartContext();
     const [status, setStatus] = useState({ loading: false, id: "" });
 
+    const subTotal = cart?.cartItems.reduce((toplam, item) => toplam + item.product.price * item.product.quantity, 0);
+
+    const tax = subTotal * 0.2;
+    const total = subTotal + tax;
+
     if (!cart || cart.cartItems.length === 0)
         return <Typography component="h4">Sepetinizde ürün yok.</Typography>
 
@@ -89,6 +94,21 @@ export default function CartPage() {
                             </TableCell>
                         </TableRow>
                     ))}
+                    <TableRow>
+                        <TableCell align="right" colSpan={5}>Ara Toplam</TableCell>
+                        <TableCell align="right" colSpan={5}>{currencyTRY.format(subTotal)}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell align="right" colSpan={5}>Vergi</TableCell>
+                        <TableCell align="right" colSpan={5}>{currencyTRY.format(tax)}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell align="right" colSpan={5}>Toplam</TableCell>
+                        <TableCell align="right" colSpan={5}>{currencyTRY.format(total)}</TableCell>
+                    </TableRow>
+
                 </TableBody>
             </Table>
         </TableContainer>
