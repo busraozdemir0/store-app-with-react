@@ -2,6 +2,8 @@ import { LockOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import requests from "../api/apiClient";
+import { useNavigate } from "react-router";
 
 export default function LoginPage() {
 
@@ -24,6 +26,8 @@ export default function LoginPage() {
     //     setValues({ ...values, [name]: value });
     // }
 
+    const navigate = useNavigate();
+
     const { register, handleSubmit, formState: { errors, isValid } } = useForm({
         defaultValues: {
             userName: "",
@@ -31,11 +35,14 @@ export default function LoginPage() {
         },
     });
 
-    console.log(errors);
-
-
     function handleForm(data) {
-        console.log(data);
+        requests.account.login(data)
+            .then((result) => {
+                console.log(result);
+                localStorage.setItem("user", JSON.stringify(result))
+                navigate("/");
+            })
+            .catch((error) => console.log(error));
     }
 
     return (
@@ -71,7 +78,7 @@ export default function LoginPage() {
                         // name="password"
                         {...register("password", {
                             required: "password zorunlu alan",
-                             minLength: {
+                            minLength: {
                                 value: 6,
                                 message: "username min. 6 karakter olmalıdır."
                             }

@@ -71,12 +71,19 @@ const cart = {
     get: () => methods.get("carts"),
     addItem: (productId, quantity = 1) => methods.post(`carts?productId=${productId}&quantity=${quantity}`, {}),
     deleteItem: (productId, quantity = 1) => methods.delete(`carts?productId=${productId}&quantity=${quantity}`),
-}
+};
+
+const account = {
+    login: (formData) => methods.post("users/login", formData),
+    register: (formData) => methods.post("users/register", formData),
+    getUser: () => methods.post("users/getUser"),
+};
 
 const requests = {
     products,
     errors,
     cart,
+    account,
 };
 
 export default requests;
