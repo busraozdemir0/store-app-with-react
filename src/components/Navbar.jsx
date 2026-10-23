@@ -3,7 +3,8 @@ import StorefrontIcon from "@mui/icons-material/Storefront";
 import { Link, NavLink } from "react-router";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCartContext } from "../context/CartContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../pages/account/accountSlice";
 
 const links = [
     { title: "Home", to: "/" },
@@ -18,8 +19,10 @@ const authLinks = [
 
 export default function Navbar() {
     // const { cart } = useCartContext();
-    const {cart} = useSelector((state) => state.cart );
+    const { cart } = useSelector((state) => state.cart);
     const itemCount = cart?.cartItems.reduce((total, item) => total + item.product.quantity, 0); // total değişkenini 0dan başlatıp her bir ürünün quantity değerini toplayıp totale atıyoruz
+    const { user } = useSelector((state) => state.account);
+    const dispatch = useDispatch();
 
     return <AppBar position="static" sx={{ backgroundColor: "secondary.light" }}>
         <Toolbar>
@@ -43,11 +46,22 @@ export default function Navbar() {
                     </Badge>
                 </IconButton>
                 {
-                    authLinks.map((link) => (
-                        <Button key={link.to} component={NavLink} to={link.to} color="inherit">
-                            {link.title}
-                        </Button>
-                    ))
+                    user ? (
+                        <>
+                        <Button color="inherit">{user.username}</Button>
+                        <Button color="inherit" onClick={() => dispatch(logout())}>Logout</Button>
+                        </>
+                    ) : (
+                        <>
+                            {
+                                authLinks.map((link) => (
+                                    <Button key={link.to} component={NavLink} to={link.to} color="inherit">
+                                        {link.title}
+                                    </Button>
+                                ))
+                            }
+                        </>
+                    )
                 }
             </Box>
         </Toolbar>
