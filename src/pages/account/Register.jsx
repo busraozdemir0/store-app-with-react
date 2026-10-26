@@ -1,8 +1,11 @@
 import { LockOutlined } from "@mui/icons-material";
-import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Container, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import requests from "../../api/apiClient";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "./accountSlice";
+import { useForm } from "react-hook-form";
 
 export default function RegisterPage() {
 
@@ -26,22 +29,26 @@ export default function RegisterPage() {
     // }
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { status } = useSelector((state) => state.account);
 
     const { register, handleSubmit, formState: { errors, isValid } } = useForm({
         defaultValues: {
             userName: "",
-            email:  "",
+            email: "",
             password: "",
         },
     });
 
     function handleForm(data) {
-        requests.account.register(data)
-        .then((result) => {
-            console.log(result);
-            navigate("/login");
-        })
-        .catch(error => console.log(error));
+        // requests.account.register(data)
+        // .then((result) => {
+        //     console.log(result);
+        //     navigate("/login");
+        // })
+        // .catch(error => console.log(error));
+
+        dispatch(registerUser(data));
     }
 
     return (
@@ -95,7 +102,7 @@ export default function RegisterPage() {
                         // name="password"
                         {...register("password", {
                             required: "password zorunlu alan",
-                             minLength: {
+                            minLength: {
                                 value: 6,
                                 message: "username min. 6 karakter olmalıdır."
                             }
@@ -108,7 +115,9 @@ export default function RegisterPage() {
                         error={!!errors.password}
                         helperText={errors.password?.message}
                     />
-                    <Button type="submit" variant="contained" fullWidth sx={{ mt: 1 }} color="secondary" disabled={!isValid}>Submit</Button>
+                    <Button type="submit" variant="contained" fullWidth sx={{ mt: 1 }} color="secondary" disabled={!isValid}>
+                        {status === "pending" ? <CircularProgress size="25px" /> : "Submit"}
+                    </Button>
                 </Box>
             </Paper>
         </Container>

@@ -1,11 +1,11 @@
 import { LockOutlined } from "@mui/icons-material";
-import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Container, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import requests from "../../api/apiClient";
 import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import { setUser } from "./accountSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "./accountSlice";
 
 export default function LoginPage() {
 
@@ -30,6 +30,7 @@ export default function LoginPage() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { status } = useSelector((state) => state.account);
 
     const { register, handleSubmit, formState: { errors, isValid } } = useForm({
         defaultValues: {
@@ -39,14 +40,16 @@ export default function LoginPage() {
     });
 
     function handleForm(data) {
-        requests.account.login(data)
-            .then((user) => {
-                console.log(user);
-                localStorage.setItem("user", JSON.stringify(user));
-                dispatch(setUser(user))
-                navigate("/");
-            })
-            .catch((error) => console.log(error));
+        // requests.account.login(data)
+        //     .then((user) => {
+        //         console.log(user);
+        //         localStorage.setItem("user", JSON.stringify(user));
+        //         dispatch(setUser(user))
+        //         navigate("/");
+        //     })
+        //     .catch((error) => console.log(error));
+
+        dispatch(loginUser(data));
     }
 
     return (
@@ -95,7 +98,9 @@ export default function LoginPage() {
                         error={!!errors.password}
                         helperText={errors.password?.message}
                     />
-                    <Button type="submit" variant="contained" fullWidth sx={{ mt: 1 }} color="secondary" disabled={!isValid}>Submit</Button>
+                    <Button type="submit" variant="contained" fullWidth sx={{ mt: 1 }} color="secondary" disabled={!isValid}>
+                        {status === "pending" ? <CircularProgress size="25px" /> : "Submit"}
+                    </Button>
                 </Box>
             </Paper>
         </Container>
