@@ -1,10 +1,12 @@
-import { AppBar, Badge, Box, Button, IconButton, Toolbar } from "@mui/material";
+import { AppBar, Badge, Box, Button, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { Link, NavLink } from "react-router";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCartContext } from "../context/CartContext";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../pages/account/accountSlice";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import { useState } from "react";
 
 const links = [
     { title: "Home", to: "/" },
@@ -23,6 +25,17 @@ export default function Navbar() {
     const itemCount = cart?.cartItems.reduce((total, item) => total + item.product.quantity, 0); // total değişkenini 0dan başlatıp her bir ürünün quantity değerini toplayıp totale atıyoruz
     const { user } = useSelector((state) => state.account);
     const dispatch = useDispatch();
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    function handleClick(event){
+        setAnchorEl(event.currentTarget);
+    }
+
+    function handleClose(){
+        setAnchorEl(null);
+    }
 
     return <AppBar position="static" sx={{ backgroundColor: "secondary.light" }}>
         <Toolbar>
@@ -48,8 +61,17 @@ export default function Navbar() {
                 {
                     user ? (
                         <>
-                        <Button color="inherit">{user.username}</Button>
-                        <Button color="inherit" onClick={() => dispatch(logout())}>Logout</Button>
+                            <Button id="user-button"
+                                onClick={handleClick}
+                                endIcon={<KeyboardArrowDown />}
+                                color="inherit">
+                                {user.username}
+                            </Button>
+
+                            <Menu id="user-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+                                <MenuItem component={Link} to="/orders">Orders</MenuItem>
+                                <MenuItem onClick={() => dispatch(logout())}>Logout</MenuItem>
+                            </Menu>
                         </>
                     ) : (
                         <>
