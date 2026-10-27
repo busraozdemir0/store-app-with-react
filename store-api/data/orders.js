@@ -92,12 +92,14 @@ async function add(order) {
   return newOrder.id;
 }
 
+// https://sandbox-merchant.iyzipay.com/transactions
+
 async function payment(order) {
   // const cart = await getCart(order.customerId);
   var iyzipay = new Iyzipay({
-    apiKey: "api_key",
-    secretKey: "secret_key",
-    uri: "https://sandbox-api.iyzipay.com",
+    apiKey: process.env.IYZICO_API_KEY,
+    secretKey: process.env.IYZICO_SECRET_KEY,
+    uri: process.env.IYZICO_URI,
   });
 
   var request = {

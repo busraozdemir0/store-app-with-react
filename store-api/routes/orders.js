@@ -51,10 +51,12 @@ router.post("/", verifyToken, async (req, res, next) => {
   try {
     const id = await add(order);
     res.status(201).json({ message: "Order saved.", orderId: id });
-    // await payment(order);
+    await payment(order);
   } catch (error) {
     next(error);
   }
 });
 
 module.exports = router;
+
+// iyzico için örnek alınan repo linki => https://github.com/iyzico/iyzipay-node
