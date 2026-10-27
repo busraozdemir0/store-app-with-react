@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button, Box } from "@mui/material";
+import { CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button, Box, Alert } from "@mui/material";
 import { currencyTRY } from "../../utils/format";
 import { Delete } from "@mui/icons-material";
 import Loading from "../../components/Loading";
@@ -38,7 +38,7 @@ export default function CartPage() {
     const total = subTotal + tax;
 
     if (!cart || cart.cartItems.length === 0)
-        return <Typography component="h4">Sepetinizde ürün yok.</Typography>
+        return <Alert severity="warning">Sepetinizde ürün yok.</Alert>
 
     // function handleAddItem(productId, id) {
     //     setStatus({ loading: true, id: id });
